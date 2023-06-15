@@ -19,7 +19,7 @@ def reducer(frequencies):
     return word_count
 
 
-txt = ["This is nehha and aqib and aqib and nehha is This","Hello is hello and hello"]
+txt = [" "]
 
 mapper_result=[]
 print("\nMapper result:")
