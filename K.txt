@@ -1,0 +1,407 @@
+# A kotlin program that demonstrates the use of let, with, run, apply, and also functions in Kotlin.
+
+data class Person(var name: String, var age: Int)
+
+fun main() {
+    val person = Person("Alice", 25)
+
+    // let function
+    person.let { p ->
+        p.age += 5
+        println("Let: ${p.name}, ${p.age}")
+    }
+
+    // with function
+    with(person) {
+        age += 10
+        println("With: $name, $age")
+    }
+
+    // run function
+    val result = person.run {
+        age += 3
+        "Run: $name, $age"
+    }
+    println(result)
+
+    // apply function
+    val appliedPerson = person.apply {
+        name = "Bob"
+        age = 30
+    }
+    println("Apply: ${appliedPerson.name}, ${appliedPerson.age}")
+
+    // also function
+    val alsoPerson = person.also {
+        it.name = "Carol"
+        it.age = 35
+    }
+    println("Also: ${alsoPerson.name}, ${alsoPerson.age}")
+}
+
+
+# A program that implements a Student class with properties: name, age, and grades.
+
+class Student(val name: String, val age: Int, val grades: List<Int>) {
+    fun calculateAverageGrade(): Double {
+        val sum = grades.sum()
+        return sum.toDouble() / grades.size
+    }
+
+    fun printStudentDetails() {
+        println("Name: $name")
+        println("Age: $age")
+        println("Grades: $grades")
+        println("Average Grade: ${calculateAverageGrade()}")
+    }
+}
+
+fun main() {
+    val student = Student("Alice", 18, listOf(80, 85, 90, 95))
+    student.printStudentDetails()
+}
+
+
+# A program that uses lambda expressions and higher-order functions to find the maximum value in a list of integers.
+
+fun main() {
+    val numbers = listOf(10, 5, 8, 15, 3, 20, 12)
+
+    val maxNumber = numbers.maxByOrNull { it }
+    println("Maximum number: $maxNumber")
+
+    val maxNumberSquared = numbers.maxByOrNull { it * it }
+    println("Maximum number squared: $maxNumberSquared")
+}
+
+# A program that implements a Shape interface with two classes, Circle and Rectangle, that implement the Shape interface.
+
+interface Shape {
+    fun calculateArea(): Double
+}
+
+class Circle(private val radius: Double) : Shape {
+    override fun calculateArea(): Double {
+        return Math.PI * radius * radius
+    }
+}
+
+class Rectangle(private val width: Double, private val height: Double) : Shape {
+    override fun calculateArea(): Double {
+        return width * height
+    }
+}
+
+fun main() {
+    val circle = Circle(5.0)
+    val rectangle = Rectangle(4.0, 6.0)
+
+    println("Circle Area: ${circle.calculateArea()}")
+    println("Rectangle Area: ${rectangle.calculateArea()}")
+}
+
+# A program to read a text file, count the frequency of each word, and save the results in a new text file.
+
+import java.io.File
+
+fun main() {
+    val inputFile = File("input.txt") // Replace with the path to your input file
+    val outputFile = File("output.txt") // Replace with the desired path for the output file
+
+    val wordCountMap = mutableMapOf<String, Int>()
+
+    // Read the input file and count the frequency of each word
+    inputFile.forEachLine { line ->
+        val words = line.split("\\s+".toRegex())
+        for (word in words) {
+            val count = wordCountMap.getOrDefault(word, 0)
+            wordCountMap[word] = count + 1
+        }
+    }
+
+    // Save the word frequencies to the output file
+    outputFile.bufferedWriter().use { writer ->
+        for ((word, count) in wordCountMap) {
+            writer.write("$word: $count\n")
+        }
+    }
+
+    println("Word frequencies saved to ${outputFile.absolutePath}")
+}
+
+
+# A program that demonstrates the use of coroutines to fetch data from two different web APIs concurrently.
+
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+
+// Simulated API functions
+suspend fun fetchUserData(): String {
+    delay(2000) // Simulating API delay
+    return "User data"
+}
+
+suspend fun fetchProductData(): String {
+    delay(1500) // Simulating API delay
+    return "Product data"
+}
+
+fun main() = runBlocking {
+    val userDataDeferred = async { fetchUserData() }
+    val productDataDeferred = async { fetchProductData() }
+
+    val userData = userDataDeferred.await()
+    val productData = productDataDeferred.await()
+
+    println("User data: $userData")
+    println("Product data: $productData")
+}
+
+# A program to find the GCD of two given numbers using the Euclidean algorithm.
+
+fun gcd(a: Int, b: Int): Int {
+    var num1 = a
+    var num2 = b
+
+    while (num2 != 0) {
+        val temp = num2
+        num2 = num1 % num2
+        num1 = temp
+    }
+
+    return num1
+}
+
+fun main() {
+    val number1 = 48
+    val number2 = 36
+
+    val result = gcd(number1, number2)
+    println("GCD of $number1 and $number2 is: $result")
+}
+
+
+# An extension function for the String class that returns the number of vowels in the string.
+
+fun String.countVowels(): Int {
+    val vowels = setOf('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
+    var count = 0
+
+    for (char in this) {
+        if (char in vowels) {
+            count++
+        }
+    }
+
+    return count
+}
+
+fun main() {
+    val text = "Hello, World!"
+    val vowelCount = text.countVowels()
+
+    println("Vowel count in '$text': $vowelCount")
+}
+
+
+# A program to generate a list of the first n Fibonacci numbers, where n is a user input.
+
+fun generateFibonacciNumbers(n: Int): List<Int> {
+    val fibonacciNumbers = mutableListOf<Int>()
+
+    var num1 = 0
+    var num2 = 1
+
+    for (i in 1..n) {
+        fibonacciNumbers.add(num1)
+
+        val sum = num1 + num2
+        num1 = num2
+        num2 = sum
+    }
+
+    return fibonacciNumbers
+}
+
+fun main() {
+    print("Enter the value of n: ")
+    val n = readLine()?.toIntOrNull()
+
+    if (n != null && n > 0) {
+        val fibonacciNumbers = generateFibonacciNumbers(n)
+        println("The first $n Fibonacci numbers are:")
+        println(fibonacciNumbers)
+    } else {
+        println("Invalid input. Please enter a positive integer.")
+    }
+}
+
+
+# A function that takes two integer arrays as arguments and returns a new array that contains the intersection of the two input arrays.
+
+fun findIntersection(array1: IntArray, array2: IntArray): IntArray {
+    val set1 = array1.toSet()
+    val set2 = array2.toSet()
+    val intersectionSet = set1.intersect(set2)
+    return intersectionSet.toIntArray()
+}
+
+fun main() {
+    val array1 = intArrayOf(1, 2, 3, 4, 5)
+    val array2 = intArrayOf(4, 5, 6, 7, 8)
+
+    val intersectionArray = findIntersection(array1, array2)
+    println("Intersection Array: ${intersectionArray.contentToString()}")
+}
+
+# A program that creates a Person class with properties: firstName, lastName, and age.
+
+class Person(val firstName: String, val lastName: String, val age: Int)
+
+fun main() {
+    val person = Person("John", "Doe", 30)
+
+    println("First Name: ${person.firstName}")
+    println("Last Name: ${person.lastName}")
+    println("Age: ${person.age}")
+}
+
+# A program that creates a sealed class named Result and two subclasses Success and Failure.
+
+sealed class Result
+data class Success(val message: String) : Result()
+data class Failure(val error: String) : Result()
+
+fun processResult(result: Result) {
+    when (result) {
+        is Success -> println("Success: ${result.message}")
+        is Failure -> println("Failure: ${result.error}")
+    }
+}
+
+fun main() {
+    val successResult = Success("Operation successful")
+    val failureResult = Failure("Error occurred")
+
+    processResult(successResult)
+    processResult(failureResult)
+}
+
+# A program that uses anonymous functions and higher-order functions to calculate the sum of all even numbers in a list of integers.
+
+fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+
+    val sumOfEvens = numbers.filter(fun(num): Boolean {
+        return num % 2 == 0
+    }).sum()
+
+    println("Sum of even numbers: $sumOfEvens")
+}
+
+# A program that creates an abstract class Vehicle with two subclasses: Car and Motorcycle.
+
+abstract class Vehicle(val brand: String, val color: String) {
+    abstract fun drive()
+
+    fun displayDetails() {
+        println("Brand: $brand")
+        println("Color: $color")
+    }
+}
+
+class Car(brand: String, color: String) : Vehicle(brand, color) {
+    override fun drive() {
+        println("Driving the car...")
+    }
+}
+
+class Motorcycle(brand: String, color: String) : Vehicle(brand, color) {
+    override fun drive() {
+        println("Riding the motorcycle...")
+    }
+}
+
+fun main() {
+    val car = Car("Toyota", "Red")
+    car.displayDetails()
+    car.drive()
+
+    println()
+
+    val motorcycle = Motorcycle("Honda", "Blue")
+    motorcycle.displayDetails()
+    motorcycle.drive()
+}
+
+# A program to read a CSV file, filter the records based on a given condition, and save the filtered records in a new CSV file.
+
+import java.io.File
+import kotlin.math.toInt
+
+fun filterCsv(inputFile: String, outputFile: String, condition: (List<String>) -> Boolean) {
+    val file = File(inputFile)
+    val reader = file.bufferedReader()
+
+    val header = reader.readLine()?.split(",") ?: emptyList()
+
+    val filteredRows = reader.readLines()
+        .map { it.split(",") }
+        .filter { condition(it) }
+
+    reader.close()
+
+    val writer = File(outputFile).bufferedWriter()
+
+    writer.write(header.joinToString(","))
+    writer.newLine()
+
+    filteredRows.forEach {
+        writer.write(it.joinToString(","))
+        writer.newLine()
+    }
+
+    writer.close()
+
+    println("Filtered records have been saved in '$outputFile'.")
+}
+
+// Example condition function: filters records where the age is greater than or equal to 18
+fun ageCondition(row: List<String>): Boolean {
+    val age = row.getOrNull(2)?.toIntOrNull() ?: return false // Assuming age is in the third column (index 2)
+    return age >= 18
+}
+
+// Usage example
+val inputFile = "input.csv"
+val outputFile = "output.csv"
+filterCsv(inputFile, outputFile, ::ageCondition)
+
+
+# A program that demonstrates the use of Kotlin Flow to emit a sequence of integers and perform a transformation on each emitted value.
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
+
+fun main() = runBlocking {
+    // Create a flow that emits a sequence of integers
+    val numberFlow: Flow<Int> = flow {
+        for (i in 1..10) {
+            delay(1000) // Simulate some asynchronous operation
+            emit(i)
+        }
+    }
+
+    // Apply a transformation on each emitted value
+    numberFlow.map { number ->
+        // Perform transformation on the number (e.g., double it)
+        number * 2
+    }.collect { transformedNumber ->
+        println(transformedNumber)
+    }
+}
+
